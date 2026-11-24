@@ -4,6 +4,12 @@ Aplicação desktop em **Java (Swing)** para gerenciar alunos, modalidades e mat
 
 Projeto acadêmico desenvolvido em grupo na **APS (Atividade Prática Supervisionada)** e no trabalho de **Programação de Banco de Dados** do curso de Ciência da Computação da **UNIP Campinas** (2026/2).
 
+## Objetivo
+
+Centralizar em um único sistema o cadastro de alunos, as modalidades oferecidas e o vínculo entre eles, guardando o histórico de alterações diretamente no banco de dados.
+
+<!-- Adicione aqui capturas de tela: docs/img/tela-principal.png, docs/img/tela-alunos.png -->
+
 ## Funcionalidades
 
 - Cadastro, edição, listagem e exclusão de **alunos** (nome, e-mail, telefone, faixa, CPF)
@@ -48,6 +54,22 @@ Tabelas de apoio: `auditoria_aluno`, `modalidade_backup`, `modalidade_log`, `tab
 3. **Driver JDBC:** baixe o [Microsoft JDBC Driver for SQL Server](https://learn.microsoft.com/sql/connect/jdbc/download-microsoft-jdbc-driver-for-sql-server) e coloque o `.jar` em `lib/mssql-jdbc.jar`.
 4. **Credenciais:** defina as variáveis de ambiente `DB_USUARIO` (padrão: `sa`) e `DB_SENHA`.
 5. **VS Code:** com o *Extension Pack for Java*, abra a pasta do projeto e execute `src/view/TelaPrincipal.java`.
+
+## Aprendizados
+
+- Separar a aplicação em camadas (view, controller, DAO, model) e entender o caminho de uma ação até o banco
+- Usar `PreparedStatement` para evitar SQL Injection
+- Modelar uma relação N:N com tabela associativa e chaves estrangeiras
+- Levar regras para o banco com procedures, functions e triggers de auditoria
+- Manter credenciais fora do código com variáveis de ambiente
+
+## Melhorias futuras
+
+- Propagar erros do DAO até a interface, para que a tela não exiba "sucesso" quando o banco recusar a operação
+- Validar campos (e-mail, CPF, faixa a partir de uma lista fixa)
+- Gerenciar dependências e build com Maven
+- Testes automatizados para controllers e DAOs
+- Evoluir para uma API REST com Spring Boot, reaproveitando o modelo de dados
 
 ## Autoria
 
