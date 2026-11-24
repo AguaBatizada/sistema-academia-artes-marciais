@@ -1,5 +1,6 @@
 package view;
 
+import dao.DAOException;
 import controller.AlunoController;
 import model.Aluno;
 
@@ -142,6 +143,8 @@ public class TelaAluno extends JFrame {
             JOptionPane.showMessageDialog(this, "Aluno salvo com sucesso!");
             limpar();
             carregarTabela();
+        } catch (DAOException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar aluno.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -154,10 +157,14 @@ public class TelaAluno extends JFrame {
         }
         int confirm = JOptionPane.showConfirmDialog(this, "Deseja realmente excluir este aluno?", "Confirmação", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            controller.excluir(Integer.parseInt(txtId.getText()));
-            JOptionPane.showMessageDialog(this, "Aluno excluído com sucesso!");
-            limpar();
-            carregarTabela();
+            try {
+                controller.excluir(Integer.parseInt(txtId.getText()));
+                JOptionPane.showMessageDialog(this, "Aluno excluído com sucesso!");
+                limpar();
+                carregarTabela();
+            } catch (DAOException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -180,7 +187,13 @@ public class TelaAluno extends JFrame {
         else if (indexOrd == 2) ordenacao = "faixa";
 
         String filtro = txtBusca.getText();
-        List<Aluno> lista = controller.listar(ordenacao, filtro);
+        List<Aluno> lista;
+        try {
+            lista = controller.listar(ordenacao, filtro);
+        } catch (DAOException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         for (Aluno a : lista) {
             modeloTabela.addRow(new Object[]{

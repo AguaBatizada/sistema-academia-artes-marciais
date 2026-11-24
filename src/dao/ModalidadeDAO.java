@@ -19,7 +19,7 @@ public class ModalidadeDAO {
             stmt.setString(4, m.getHorario());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Erro ao cadastrar modalidade.", e);
         }
     }
 
@@ -34,7 +34,7 @@ public class ModalidadeDAO {
             stmt.setInt(5, m.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Erro ao atualizar modalidade.", e);
         }
     }
 
@@ -45,7 +45,7 @@ public class ModalidadeDAO {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Não foi possível excluir a modalidade. Verifique se ela possui matrículas.", e);
         }
     }
 
@@ -85,7 +85,7 @@ public class ModalidadeDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Erro ao listar modalidades.", e);
         }
         return lista;
     }

@@ -18,7 +18,7 @@ public class MatriculaDAO {
             stmt.setString(3, m.getStatus());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Erro ao realizar matrícula.", e);
         }
     }
 
@@ -29,7 +29,7 @@ public class MatriculaDAO {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Erro ao cancelar matrícula.", e);
         }
     }
 
@@ -57,7 +57,7 @@ public class MatriculaDAO {
                 lista.add(m);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Erro ao listar matrículas.", e);
         }
         return lista;
     }

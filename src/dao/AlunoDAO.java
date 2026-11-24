@@ -20,7 +20,7 @@ public class AlunoDAO {
             stmt.setString(5, a.getCpf());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Erro ao cadastrar aluno.", e);
         }
     }
 
@@ -36,7 +36,7 @@ public class AlunoDAO {
             stmt.setInt(6, a.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Erro ao atualizar aluno.", e);
         }
     }
 
@@ -47,7 +47,7 @@ public class AlunoDAO {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Não foi possível excluir o aluno. Verifique se ele possui matrículas.", e);
         }
     }
 
@@ -88,7 +88,7 @@ public class AlunoDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Erro ao listar alunos.", e);
         }
         return lista;
     }

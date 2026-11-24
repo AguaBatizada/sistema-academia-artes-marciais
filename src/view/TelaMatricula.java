@@ -1,5 +1,6 @@
 package view;
 
+import dao.DAOException;
 import controller.AlunoController;
 import controller.ModalidadeController;
 import controller.MatriculaController;
@@ -102,6 +103,14 @@ public class TelaMatricula extends JFrame {
     }
 
     private void carregarCombos() {
+        try {
+            preencherCombos();
+        } catch (DAOException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void preencherCombos() {
         cbAlunos.removeAllItems();
         List<Aluno> alunos = alunoController.listar("id", "");
         for (Aluno a : alunos) {
@@ -135,6 +144,8 @@ public class TelaMatricula extends JFrame {
             JOptionPane.showMessageDialog(this, "Matrícula realizada com sucesso na modalidade " + modalidadeSelecionada.getNome() + "!");
             txtIdMatricula.setText("");
             carregarTabela();
+        } catch (DAOException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao realizar matrícula.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -147,16 +158,26 @@ public class TelaMatricula extends JFrame {
         }
         int confirm = JOptionPane.showConfirmDialog(this, "Deseja realmente cancelar esta matrícula?", "Confirmação", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            matriculaController.excluir(Integer.parseInt(txtIdMatricula.getText()));
-            JOptionPane.showMessageDialog(this, "Matrícula cancelada com sucesso!");
-            txtIdMatricula.setText("");
-            carregarTabela();
+            try {
+                matriculaController.excluir(Integer.parseInt(txtIdMatricula.getText()));
+                JOptionPane.showMessageDialog(this, "Matrícula cancelada com sucesso!");
+                txtIdMatricula.setText("");
+                carregarTabela();
+            } catch (DAOException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
     private void carregarTabela() {
         modeloTabela.setRowCount(0);
-        List<Matricula> lista = matriculaController.listar();
+        List<Matricula> lista;
+        try {
+            lista = matriculaController.listar();
+        } catch (DAOException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         for (Matricula m : lista) {
             modeloTabela.addRow(new Object[]{
                 m.getId(), m.getNomeAluno(), m.getNomeModalidade(), m.getStatus(), m.getDataMatricula()

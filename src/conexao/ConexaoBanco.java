@@ -5,19 +5,22 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConexaoBanco {
-    public static Connection getConexao() {
-        String url = "jdbc:sqlserver://localhost:1433;databaseName=academia_db;encrypt=true;trustServerCertificate=true;";
-        // Credenciais lidas de variáveis de ambiente (veja o README): DB_USUARIO e DB_SENHA
+    private static final String URL =
+        "jdbc:sqlserver://localhost:1433;databaseName=academia_db;encrypt=true;trustServerCertificate=true;";
+
+    /**
+     * Abre uma conexão com o SQL Server.
+     * Credenciais lidas de variáveis de ambiente (veja o README): DB_USUARIO e DB_SENHA.
+     *
+     * @throws SQLException se a senha não estiver configurada ou a conexão falhar
+     */
+    public static Connection getConexao() throws SQLException {
         String usuario = System.getenv().getOrDefault("DB_USUARIO", "sa");
         String senha = System.getenv("DB_SENHA");
 
-        try {
-            Connection conexao = DriverManager.getConnection(url, usuario, senha);
-            return conexao;
-        } catch (SQLException e) {
-            System.out.println("Erro ao conectar com o banco.");
-            e.printStackTrace();
-            return null;
+        if (senha == null || senha.isEmpty()) {
+            throw new SQLException("Variável de ambiente DB_SENHA não definida.");
         }
+        return DriverManager.getConnection(URL, usuario, senha);
     }
 }

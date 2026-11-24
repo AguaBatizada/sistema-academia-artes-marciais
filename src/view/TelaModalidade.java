@@ -1,5 +1,6 @@
 package view;
 
+import dao.DAOException;
 import controller.ModalidadeController;
 import model.Modalidade;
 
@@ -136,6 +137,8 @@ public class TelaModalidade extends JFrame {
             JOptionPane.showMessageDialog(this, "Modalidade salva com sucesso!");
             limpar();
             carregarTabela();
+        } catch (DAOException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Verifique o campo numérico (Mensalidade).", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
         }
@@ -148,10 +151,14 @@ public class TelaModalidade extends JFrame {
         }
         int confirm = JOptionPane.showConfirmDialog(this, "Deseja realmente excluir esta modalidade?", "Confirmação", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            controller.excluir(Integer.parseInt(txtId.getText()));
-            JOptionPane.showMessageDialog(this, "Modalidade excluída com sucesso!");
-            limpar();
-            carregarTabela();
+            try {
+                controller.excluir(Integer.parseInt(txtId.getText()));
+                JOptionPane.showMessageDialog(this, "Modalidade excluída com sucesso!");
+                limpar();
+                carregarTabela();
+            } catch (DAOException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -173,7 +180,13 @@ public class TelaModalidade extends JFrame {
         else if (indexOrd == 2) ordenacao = "mensalidade";
 
         String filtro = txtBusca.getText();
-        List<Modalidade> lista = controller.listar(ordenacao, filtro);
+        List<Modalidade> lista;
+        try {
+            lista = controller.listar(ordenacao, filtro);
+        } catch (DAOException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         for (Modalidade m : lista) {
             modeloTabela.addRow(new Object[]{
