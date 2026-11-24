@@ -1,5 +1,7 @@
 # Sistema de Gestão para Academia de Artes Marciais
 
+[![Build](https://github.com/AguaBatizada/sistema-academia-artes-marciais/actions/workflows/build.yml/badge.svg)](https://github.com/AguaBatizada/sistema-academia-artes-marciais/actions/workflows/build.yml)
+
 Aplicação desktop em **Java (Swing)** para gerenciar alunos, modalidades e matrículas de uma academia de artes marciais, com banco de dados **SQL Server (T-SQL)**.
 
 Projeto acadêmico desenvolvido em grupo na **APS (Atividade Prática Supervisionada)** e no trabalho de **Programação de Banco de Dados** do curso de Ciência da Computação da **UNIP Campinas** (2026/2).
@@ -19,6 +21,8 @@ Centralizar em um único sistema o cadastro de alunos, as modalidades oferecidas
 ## Tecnologias e conceitos
 
 - Java 17+, Swing, JDBC com `PreparedStatement`
+- Tratamento de erros com exceção própria (`DAOException`): falhas do banco chegam à interface com mensagem clara
+- Integração contínua com GitHub Actions (compilação a cada push)
 - Arquitetura **MVC** + padrão **DAO**
 - SQL Server: tabelas com PK/FK, **views**, **stored procedures**, **functions** e **triggers** (auditoria, backup e log de reajuste)
 
@@ -28,7 +32,7 @@ Centralizar em um único sistema o cadastro de alunos, as modalidades oferecidas
 src/
 ├── conexao/     ConexaoBanco            -> conexão JDBC com o SQL Server
 ├── model/       Aluno, Modalidade, Matricula
-├── dao/         AlunoDAO, ModalidadeDAO, MatriculaDAO   (SQL)
+├── dao/         AlunoDAO, ModalidadeDAO, MatriculaDAO, DAOException   (SQL)
 ├── controller/  AlunoController, ModalidadeController, MatriculaController
 └── view/        TelaPrincipal, TelaAluno, TelaModalidade, TelaMatricula (Swing)
 script_banco_dados.sql   -> DDL, DML, views, procedures, functions e triggers
@@ -62,10 +66,10 @@ Tabelas de apoio: `auditoria_aluno`, `modalidade_backup`, `modalidade_log`, `tab
 - Modelar uma relação N:N com tabela associativa e chaves estrangeiras
 - Levar regras para o banco com procedures, functions e triggers de auditoria
 - Manter credenciais fora do código com variáveis de ambiente
+- Propagar erros do banco até a interface, em vez de exibir sucesso quando a operação falha
 
 ## Melhorias futuras
 
-- Propagar erros do DAO até a interface, para que a tela não exiba "sucesso" quando o banco recusar a operação
 - Validar campos (e-mail, CPF, faixa a partir de uma lista fixa)
 - Gerenciar dependências e build com Maven
 - Testes automatizados para controllers e DAOs

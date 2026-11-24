@@ -3,3 +3,8 @@ out/
 *.class
 lib/*.jar
 .env
+
+# IDEs
+.vscode/
+.idea/
+*.iml
